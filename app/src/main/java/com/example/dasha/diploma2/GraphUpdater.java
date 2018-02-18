@@ -23,7 +23,8 @@ public class GraphUpdater extends TimerTask {
         Canvas c = cubeView.getHolder().lockCanvas();
         if (c!=null){
             c.drawColor(Color.WHITE);
-            cubeView.drawCube(c);
+            cubeView.drawSea(c);
+            cubeView.drawShip(c);
             cubeView.getHolder().unlockCanvasAndPost(c);
         }
     }

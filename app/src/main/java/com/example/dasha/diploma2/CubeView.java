@@ -15,7 +15,7 @@ import android.view.SurfaceView;
 
 public class CubeView extends SurfaceView {
 
-    Bitmap bitmapCube;
+    Bitmap bitmapShip, bitmapSea;
     Paint paint = new Paint();
     int width;
     int height;
@@ -24,8 +24,10 @@ public class CubeView extends SurfaceView {
     public CubeView(Context context) {
         super(context);
 
-        bitmapCube = BitmapFactory.decodeResource(context.getResources(),
-                R.drawable.cube);
+        bitmapShip = BitmapFactory.decodeResource(context.getResources(),
+                R.drawable.ship);
+        bitmapSea = BitmapFactory.decodeResource(context.getResources(),
+                R.drawable.sea);
 
     }
 
@@ -33,16 +35,25 @@ public class CubeView extends SurfaceView {
         this.rotate += rotate;
     }
 
-    public void drawCube(Canvas c){
+    public void drawShip(Canvas c){
         paint.setColor(Color.BLUE);
         width = c.getWidth();
         height = c.getHeight();
 
-        Bitmap bitmapCube_ = Bitmap.createScaledBitmap(bitmapCube, width / 6, height / 3, true);
+        Bitmap bitmapShip_ = Bitmap.createScaledBitmap(bitmapShip, width / 2, height, true);
 
-        c.rotate(rotate, 500 + (width/6)/2, 300+ (height/3)/2);
-        c.drawBitmap(bitmapCube_, 500, 300, paint);
+        c.rotate(rotate, 500 + (width/12), 300+ (height/6));
+        c.drawBitmap(bitmapShip_, 350, 320, paint);
 
+    }
+
+    public void drawSea(Canvas c){
+        paint.setColor(Color.BLUE);
+        width = c.getWidth();
+        height = c.getHeight();
+
+        Bitmap bitmapSea_ = Bitmap.createScaledBitmap(bitmapSea, width, height, true);
+        c.drawBitmap(bitmapSea_,0,0, paint);
     }
 
 
