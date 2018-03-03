@@ -24,6 +24,8 @@ public class GraphUpdater extends TimerTask {
         if (c!=null){
             c.drawColor(Color.WHITE);
             cubeView.drawSea(c);
+            cubeView.drawButtonUp(c);
+            cubeView.drawButtonDown(c);
             cubeView.drawShip(c);
             cubeView.getHolder().unlockCanvasAndPost(c);
         }
