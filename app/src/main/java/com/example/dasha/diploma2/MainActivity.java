@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private Sensor mOrientation;
     private SensorManager mSensorManager;
     private Timer timer;
+    private double speed = 0.;
     private TextView tv_XZ;
     private float xz_angle = 0.0f;
 
@@ -29,6 +30,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         this.mSensorManager = (SensorManager) getSystemService("sensor");
         this.mOrientation = this.mSensorManager.getDefaultSensor(1);
         this.mSensorManager.registerListener(this, this.mOrientation, 3);
+    }
+
+    public void updateSpeed(double speed){
+        CubeView.setSpeed(speed);
+    }
+
+    public double getUpdatedSpeed(){
+        return CubeView.speed;
     }
 
     public void onSensorChanged(SensorEvent event) {

@@ -11,23 +11,30 @@ import java.util.TimerTask;
 
 
 public class GraphUpdater extends TimerTask {
-    CubeView cubeView;
+    private CubeView cubeView;
+    static String color;
 
     GraphUpdater(CubeView cubeView)
     {
         this.cubeView=cubeView;
     }
 
+    public static void updateColor(String color){
+        CubeView.setColor(color);
+
+    }
+
     @Override
     public void run() {
-        Canvas c = cubeView.getHolder().lockCanvas();
-        if (c!=null){
-            c.drawColor(Color.WHITE);
-            cubeView.drawSea(c);
-            cubeView.drawButtonUp(c);
-            cubeView.drawButtonDown(c);
-            cubeView.drawShip(c);
-            cubeView.getHolder().unlockCanvasAndPost(c);
+        Canvas canvas = cubeView.getHolder().lockCanvas();
+        if (canvas!=null){
+            canvas.drawColor(Color.WHITE);
+            cubeView.drawSea(canvas);
+            cubeView.drawButtonUp(canvas);
+            cubeView.drawButtonDown(canvas);
+            cubeView.drawTextSpeed(canvas);
+            cubeView.drawShip(canvas);
+            cubeView.getHolder().unlockCanvasAndPost(canvas);
         }
     }
 }

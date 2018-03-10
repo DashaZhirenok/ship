@@ -17,12 +17,19 @@ import android.view.SurfaceView;
 
 public class CubeView extends SurfaceView{
 
-    Bitmap bitmapShip, bitmapSea, bitmapButtonUp, bitmapButtonDown;
-    Paint paint = new Paint();
+    private Bitmap bitmapShip, bitmapSea, bitmapButtonUp, bitmapButtonDown,
+            bitmapButtonUpBlack, bitmapButtonDownBlack, bitmapFieldForSpeed;
+    private Bitmap bitmapShip_, bitmapSea_, bitmapButtonUp_, bitmapButtonDown_,
+            bitmapButtonUpBlack_, bitmapButtonDownBlack_, bitmapFieldForSpeed_;
+    private Paint paint = new Paint();
     int rotate;
-    int widthShip, heightShip, widthSea, heightSea, widthButtonUp, heightButtonUp, drawLeftButtonUp,
+    static double speed = 0.;
+    static String color = "white";
+    private int widthShip, heightShip, widthSea, heightSea, widthButtonUp, heightButtonUp, drawLeftButtonUp,
             drawTopButtonUp, widthButtonDown, heightButtonDown, drawLeftButtonDawn,
-            drawTopButtonDown;
+            drawTopButtonDown, widthTextSpeed, widthFieldForSpeed, heightFieldForSpeed,
+            drawLeftTextSpeed, drawTopTextSpeed, drawLeftFieldForSpeed, drawTopFieldForSpeed;
+    MainActivity mainActivity = new MainActivity();
 
     public CubeView(Context context) {
         super(context);
@@ -33,8 +40,14 @@ public class CubeView extends SurfaceView{
                 R.drawable.sea);
         bitmapButtonUp = BitmapFactory.decodeResource(context.getResources(),
                 R.drawable.buttonup);
+        bitmapButtonUpBlack = BitmapFactory.decodeResource(context.getResources(),
+                R.drawable.buttonup2);
         bitmapButtonDown = BitmapFactory.decodeResource(context.getResources(),
                 R.drawable.buttondown);
+        bitmapButtonDownBlack = BitmapFactory.decodeResource(context.getResources(),
+                R.drawable.buttondown2);
+        bitmapFieldForSpeed = BitmapFactory.decodeResource(context.getResources(),
+                R.drawable.fieldforspeed);
 
     }
 
@@ -42,12 +55,20 @@ public class CubeView extends SurfaceView{
         this.rotate += rotate;
     }
 
+    public static void setSpeed(double speed){
+        CubeView.speed += speed;
+    }
+
+    public static void setColor(String color){
+        CubeView.color = color;
+    }
+
     public void drawShip(Canvas canvas){
         paint.setColor(Color.BLUE);
         widthShip = canvas.getWidth()/2;
         heightShip = canvas.getHeight();
 
-        Bitmap bitmapShip_ = Bitmap.createScaledBitmap(bitmapShip, widthShip, heightShip, true);
+        bitmapShip_ = Bitmap.createScaledBitmap(bitmapShip, widthShip, heightShip, true);
         // ограничение добавить на поворот
         canvas.rotate(rotate, 500 + (widthShip/6), 300+ (heightShip/6));
         canvas.drawBitmap(bitmapShip_, 350, 320, paint);
@@ -59,7 +80,7 @@ public class CubeView extends SurfaceView{
         widthSea = canvas.getWidth();
         heightSea = canvas.getHeight();
 
-        Bitmap bitmapSea_ = Bitmap.createScaledBitmap(bitmapSea, widthSea, heightSea, true);
+        bitmapSea_ = Bitmap.createScaledBitmap(bitmapSea, widthSea, heightSea, true);
         canvas.drawBitmap(bitmapSea_,0,0, paint);
     }
 
@@ -70,8 +91,16 @@ public class CubeView extends SurfaceView{
         drawLeftButtonUp = canvas.getWidth() - 200;
         drawTopButtonUp = 50;
 
-        Bitmap bitmapButtonUp_ = Bitmap.createScaledBitmap(bitmapButtonUp, widthButtonUp, heightButtonUp, true);
-        canvas.drawBitmap(bitmapButtonUp_, drawLeftButtonUp, drawTopButtonUp, paint);
+        if(color.equals("white") || color.equals("black2")){
+            bitmapButtonUp_ = Bitmap.createScaledBitmap(bitmapButtonUp, widthButtonUp, heightButtonUp, true);
+            canvas.drawBitmap(bitmapButtonUp_, drawLeftButtonUp, drawTopButtonUp, paint);
+        }
+
+        else if(color.equals("black1")){
+            bitmapButtonUpBlack_ = Bitmap.createScaledBitmap(bitmapButtonUpBlack, widthButtonUp, heightButtonUp, true);
+            canvas.drawBitmap(bitmapButtonUpBlack_, drawLeftButtonUp, drawTopButtonUp, paint);
+        }
+
     }
 
     public void drawButtonDown(Canvas canvas){
@@ -81,9 +110,39 @@ public class CubeView extends SurfaceView{
         drawLeftButtonDawn = canvas.getWidth() - 200;
         drawTopButtonDown = 200;
 
-        Bitmap bitmapButtonDown_ = Bitmap.createScaledBitmap(bitmapButtonDown, widthButtonDown,
-                heightButtonDown, true);
-        canvas.drawBitmap(bitmapButtonDown_, drawLeftButtonDawn, drawTopButtonDown, paint);
+        if (color.equals("white") || color.equals("black1")){
+            bitmapButtonDown_ = Bitmap.createScaledBitmap(bitmapButtonDown, widthButtonDown,
+                    heightButtonDown, true);
+            canvas.drawBitmap(bitmapButtonDown_, drawLeftButtonDawn, drawTopButtonDown, paint);
+        }
+
+        else if (color.equals("black2")){
+            bitmapButtonDownBlack_ = Bitmap.createScaledBitmap(bitmapButtonDownBlack, widthButtonDown,
+                    heightButtonDown, true);
+            canvas.drawBitmap(bitmapButtonDownBlack_, drawLeftButtonDawn, drawTopButtonDown, paint);
+        }
+
+    }
+
+    public void drawTextSpeed(Canvas canvas){
+        paint.setColor(Color.WHITE);
+        // прорисовка фона
+        widthFieldForSpeed = canvas.getWidth()/7;
+        heightFieldForSpeed = canvas.getHeight()/7;
+        drawLeftFieldForSpeed = canvas.getWidth() - 200 - widthFieldForSpeed;
+        drawTopFieldForSpeed = 150;
+        bitmapFieldForSpeed_ = Bitmap.createScaledBitmap(bitmapFieldForSpeed, widthFieldForSpeed,
+                heightFieldForSpeed, true);
+        canvas.drawBitmap(bitmapFieldForSpeed_, drawLeftFieldForSpeed, drawTopFieldForSpeed, paint);
+
+        //прорисовка текста
+        widthTextSpeed = canvas.getWidth()/18;
+        drawLeftTextSpeed = canvas.getWidth() - 180 - widthFieldForSpeed;
+        drawTopTextSpeed = 130 + heightFieldForSpeed;
+        paint.setTextSize(widthTextSpeed);
+        String currentSpeed = String.format("%.1f", mainActivity.getUpdatedSpeed());
+        canvas.drawText(currentSpeed, drawLeftTextSpeed, drawTopTextSpeed, paint);
+
     }
 
     @Override
@@ -93,22 +152,41 @@ public class CubeView extends SurfaceView{
         float currentY = event.getY();
         switch(event.getAction())
         {
+            // действие при нажатии(black picture)
+            case MotionEvent.ACTION_DOWN:
+                if( currentX > drawLeftButtonUp && currentX < drawLeftButtonUp + widthButtonUp &&
+                        currentY > drawTopButtonUp && currentY < drawTopButtonUp + heightButtonUp )
+                {
+                    mainActivity.updateSpeed(0.2);
+                    GraphUpdater.updateColor("black1");
+                    Log.v("tag", "onTouchEvent: drawable touched_1 " + mainActivity.getUpdatedSpeed());
+                }
+
+                else if( currentX > drawLeftButtonDawn && currentX < drawLeftButtonDawn + widthButtonDown &&
+                        currentY > drawTopButtonDown && currentY < drawTopButtonDown + heightButtonDown )
+                {
+                    mainActivity.updateSpeed(-0.2);
+                    GraphUpdater.updateColor("black2");
+                    Log.v("tag", "onTouchEvent: drawable touched_2 " + mainActivity.getUpdatedSpeed());
+                }
+                return true;
+
+            // действие сразу после нажатия
             case MotionEvent.ACTION_UP:
                 if( currentX > drawLeftButtonUp && currentX < drawLeftButtonUp + widthButtonUp &&
                         currentY > drawTopButtonUp && currentY < drawTopButtonUp + heightButtonUp )
                 {
-                    Log.e("tag", "onTouchEvent: drawable touched_1 ");
+                    GraphUpdater.updateColor("white");
+                    Log.v("tag", "onTouchEvent: drawable touched_10 ");
                 }
-                return true;
 
-            case MotionEvent.ACTION_DOWN:
-                if( currentX > drawLeftButtonDawn && currentX < drawLeftButtonDawn + widthButtonDown &&
+                else if( currentX > drawLeftButtonDawn && currentX < drawLeftButtonDawn + widthButtonDown &&
                         currentY > drawTopButtonDown && currentY < drawTopButtonDown + heightButtonDown )
                 {
-                    Log.e("tag", "onTouchEvent: drawable touched_2 ");
+                    GraphUpdater.updateColor("white");
+                    Log.v("tag", "onTouchEvent: drawable touched_20 ");
                 }
                 return true;
-
 
         }
         return false;
