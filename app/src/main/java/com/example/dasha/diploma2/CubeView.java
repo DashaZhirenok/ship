@@ -19,16 +19,23 @@ public class CubeView extends SurfaceView{
 
     private Bitmap bitmapShip, bitmapSea, bitmapButtonUp, bitmapButtonDown,
             bitmapButtonUpBlack, bitmapButtonDownBlack, bitmapFieldForSpeed;
-    private Bitmap bitmapShip_, bitmapSea_, bitmapButtonUp_, bitmapButtonDown_,
+    Bitmap bitmapShip_, bitmapSea_, bitmapButtonUp_, bitmapButtonDown_,
             bitmapButtonUpBlack_, bitmapButtonDownBlack_, bitmapFieldForSpeed_;
-    private Paint paint = new Paint();
+    Bitmap bitmapCompass, bitmapArrow;
+    Bitmap bitmapCompass_, bitmapArrow_;
+    Paint paint = new Paint();
     int rotate;
+    int rotateOfArrow = 0;
     static double speed = 0.;
     static String color = "white";
-    private int widthShip, heightShip, widthSea, heightSea, widthButtonUp, heightButtonUp, drawLeftButtonUp,
+    int widthShip, heightShip, widthSea, heightSea;
+    int widthButtonUp, heightButtonUp, drawLeftButtonUp,
             drawTopButtonUp, widthButtonDown, heightButtonDown, drawLeftButtonDawn,
-            drawTopButtonDown, widthTextSpeed, widthFieldForSpeed, heightFieldForSpeed,
+            drawTopButtonDown;
+    int widthTextSpeed, widthFieldForSpeed, heightFieldForSpeed,
             drawLeftTextSpeed, drawTopTextSpeed, drawLeftFieldForSpeed, drawTopFieldForSpeed;
+    int widthCompass, heightCompass, drawLeftCompass, drawTopCompass, drawTopArrow, drawLeftArrow,
+            widthArrow, heightArrow;
     MainActivity mainActivity = new MainActivity();
 
     public CubeView(Context context) {
@@ -48,11 +55,24 @@ public class CubeView extends SurfaceView{
                 R.drawable.buttondown2);
         bitmapFieldForSpeed = BitmapFactory.decodeResource(context.getResources(),
                 R.drawable.fieldforspeed);
+        bitmapCompass = BitmapFactory.decodeResource(context.getResources(),
+                R.drawable.compass2);
+        bitmapArrow = BitmapFactory.decodeResource(context.getResources(),
+                R.drawable.arrow);
 
     }
 
-    public void setRotate(double rotate){
-        this.rotate += rotate;
+    public void setRotateOfShip(double rotate){
+        Log.v("tag", "rotate"+this.rotate);
+        if(this.rotate <= 30 && this.rotate >=-30){
+            this.rotate += rotate;
+        }
+        if (this.rotate > 30){
+            this.rotate--;
+        }
+        if(this.rotate < -30){
+            this.rotate++;
+        }
     }
 
     public static void setSpeed(double speed){
@@ -69,7 +89,6 @@ public class CubeView extends SurfaceView{
         heightShip = canvas.getHeight();
 
         bitmapShip_ = Bitmap.createScaledBitmap(bitmapShip, widthShip, heightShip, true);
-        // ограничение добавить на поворот
         canvas.rotate(rotate, 500 + (widthShip/6), 300+ (heightShip/6));
         canvas.drawBitmap(bitmapShip_, 350, 320, paint);
 
@@ -89,7 +108,7 @@ public class CubeView extends SurfaceView{
         widthButtonUp = canvas.getWidth()/7;
         heightButtonUp = canvas.getHeight()/5;
         drawLeftButtonUp = canvas.getWidth() - 200;
-        drawTopButtonUp = 50;
+        drawTopButtonUp = 30;
 
         if(color.equals("white") || color.equals("black2")){
             bitmapButtonUp_ = Bitmap.createScaledBitmap(bitmapButtonUp, widthButtonUp, heightButtonUp, true);
@@ -108,7 +127,7 @@ public class CubeView extends SurfaceView{
         widthButtonDown = canvas.getWidth()/7;
         heightButtonDown = canvas.getHeight()/5;
         drawLeftButtonDawn = canvas.getWidth() - 200;
-        drawTopButtonDown = 200;
+        drawTopButtonDown = 150 + canvas.getHeight()/7;
 
         if (color.equals("white") || color.equals("black1")){
             bitmapButtonDown_ = Bitmap.createScaledBitmap(bitmapButtonDown, widthButtonDown,
@@ -125,11 +144,11 @@ public class CubeView extends SurfaceView{
     }
 
     public void drawTextSpeed(Canvas canvas){
-        paint.setColor(Color.WHITE);
+        paint.setColor(Color.GREEN);
         // прорисовка фона
         widthFieldForSpeed = canvas.getWidth()/7;
         heightFieldForSpeed = canvas.getHeight()/7;
-        drawLeftFieldForSpeed = canvas.getWidth() - 200 - widthFieldForSpeed;
+        drawLeftFieldForSpeed = canvas.getWidth() - 200;
         drawTopFieldForSpeed = 150;
         bitmapFieldForSpeed_ = Bitmap.createScaledBitmap(bitmapFieldForSpeed, widthFieldForSpeed,
                 heightFieldForSpeed, true);
@@ -137,12 +156,36 @@ public class CubeView extends SurfaceView{
 
         //прорисовка текста
         widthTextSpeed = canvas.getWidth()/18;
-        drawLeftTextSpeed = canvas.getWidth() - 180 - widthFieldForSpeed;
+        drawLeftTextSpeed = canvas.getWidth() - 180;
         drawTopTextSpeed = 130 + heightFieldForSpeed;
         paint.setTextSize(widthTextSpeed);
         String currentSpeed = String.format("%.1f", mainActivity.getUpdatedSpeed());
         canvas.drawText(currentSpeed, drawLeftTextSpeed, drawTopTextSpeed, paint);
 
+    }
+
+    public void drawCompass(Canvas canvas){
+        paint.setColor(Color.BLUE);
+        // прорисовка компаса
+        widthCompass = canvas.getWidth()/4;
+        heightCompass = canvas.getHeight()/3;
+        drawLeftCompass = 45;
+        drawTopCompass = 40;
+
+        bitmapCompass_ = Bitmap.createScaledBitmap(bitmapCompass, widthCompass,
+                heightCompass, true);
+        canvas.drawBitmap(bitmapCompass_, drawLeftCompass, drawTopCompass, paint);
+
+        // прорисовка стрелы
+        widthArrow = canvas.getWidth()/48;
+        heightArrow = canvas.getHeight()/4;
+        drawLeftArrow = 35 + widthCompass/2;
+        drawTopArrow = 0;
+
+        bitmapArrow_ = Bitmap.createScaledBitmap(bitmapArrow, widthArrow,
+                heightArrow, true);
+        canvas.rotate(rotateOfArrow, 500 + (widthArrow/6), 300+ (heightArrow/6));
+        canvas.drawBitmap(bitmapArrow_, drawLeftArrow, drawTopArrow, paint);
     }
 
     @Override

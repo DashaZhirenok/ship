@@ -21,7 +21,6 @@ public class GraphUpdater extends TimerTask {
 
     public static void updateColor(String color){
         CubeView.setColor(color);
-
     }
 
     @Override
@@ -33,6 +32,7 @@ public class GraphUpdater extends TimerTask {
             cubeView.drawButtonUp(canvas);
             cubeView.drawButtonDown(canvas);
             cubeView.drawTextSpeed(canvas);
+            cubeView.drawCompass(canvas);
             cubeView.drawShip(canvas);
             cubeView.getHolder().unlockCanvasAndPost(canvas);
         }

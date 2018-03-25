@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     public void onSensorChanged(SensorEvent event) {
         this.xz_angle = event.values[1];
-        this.cubeView.setRotate((double) this.xz_angle);
+        this.cubeView.setRotateOfShip((double) this.xz_angle);
     }
 
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
