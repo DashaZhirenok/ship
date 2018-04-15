@@ -10,7 +10,6 @@ import android.widget.TextView;
 import java.util.Timer;
 
 
-
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
     CubeView cubeView;
@@ -20,6 +19,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private double speed = 0.;
     private TextView tv_XZ;
     private float xz_angle = 0.0f;
+    private int rotateOfShip;
+    UdpClientHandler udpClientHandler;
+    UdpClientThread udpClientThread;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         this.mSensorManager = (SensorManager) getSystemService("sensor");
         this.mOrientation = this.mSensorManager.getDefaultSensor(1);
         this.mSensorManager.registerListener(this, this.mOrientation, 3);
+        udpClientHandler = new UdpClientHandler(this);
     }
 
     public void updateSpeed(double speed){
@@ -41,8 +44,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     public void onSensorChanged(SensorEvent event) {
+        udpClientThread = new UdpClientThread(
+                "192.168.0.103",  // address to: ...
+                4445, // port to: ..
+                udpClientHandler);   //handler fo thread
+        udpClientThread.start();
+
         this.xz_angle = event.values[1];
+        // set rotate on VIEW
         this.cubeView.setRotateOfShip((double) this.xz_angle);
+        // send rotate to SERVER
+        rotateOfShip = this.cubeView.getRotateOfShip();
+        this.udpClientThread.setMsgToServer(Integer.toString(rotateOfShip));
     }
 
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -62,5 +75,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         this.timer.cancel();
         this.timer.purge();
         this.mSensorManager.unregisterListener(this);
+        udpClientThread = null;
+    }
+
+    public void clientEnd(){
+        udpClientThread = null;
     }
 }

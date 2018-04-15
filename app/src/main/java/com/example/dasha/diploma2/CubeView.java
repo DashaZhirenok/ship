@@ -63,7 +63,7 @@ public class CubeView extends SurfaceView{
     }
 
     public void setRotateOfShip(double rotate){
-        Log.v("tag", "rotate"+this.rotate);
+        Log.v("tag", "rotate" + this.rotate);
         if(this.rotate <= 30 && this.rotate >=-30){
             this.rotate += rotate;
         }
@@ -73,6 +73,10 @@ public class CubeView extends SurfaceView{
         if(this.rotate < -30){
             this.rotate++;
         }
+    }
+
+    public int getRotateOfShip(){
+        return rotate;
     }
 
     public static void setSpeed(double speed){
