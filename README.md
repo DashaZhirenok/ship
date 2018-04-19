@@ -17,8 +17,7 @@ Component:
 ```sh
 :2245
 ```
-
-* package: app*
+*package: app*
 
 # GW module(Java)
 This is GW server.
@@ -27,5 +26,4 @@ This is GW server.
 ```sh
 :4445
 ```
-
-* package: gw_module *
+*package: gw_module*
