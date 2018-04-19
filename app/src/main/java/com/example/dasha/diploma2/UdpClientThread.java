@@ -32,13 +32,14 @@ public class UdpClientThread extends Thread{
     }
 
     public void setMsgToServer(String cur_msg){
-        this.cur_msg = cur_msg;
+        this.cur_msg = "mobile. " + cur_msg;
     }
 
     @Override
     public void run() {
         try {
-            socket = new DatagramSocket();
+            int clientPort = 2245;
+            socket = new DatagramSocket(clientPort);
             address = InetAddress.getByName(dstAddress);
 
             // send request
@@ -49,7 +50,6 @@ public class UdpClientThread extends Thread{
             DatagramPacket packet =
                     new DatagramPacket(buf, buf.length, address, dstPort);
             socket.send(packet);
-
             // get response
             buf = new byte[256];
             packet = new DatagramPacket(buf, buf.length);
@@ -57,7 +57,7 @@ public class UdpClientThread extends Thread{
             socket.receive(packet);
             String line = new String(packet.getData(), 0, packet.getLength());
 
-            Log.v("tag", "from sever: " + line);
+            Log.v("tag", "from server: " + line);
 
         } catch (SocketException e) {
             e.printStackTrace();
@@ -65,7 +65,7 @@ public class UdpClientThread extends Thread{
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
+        }  finally {
             if(socket != null){
                 socket.close();
                 handler.sendEmptyMessage(UdpClientHandler.UPDATE_END);

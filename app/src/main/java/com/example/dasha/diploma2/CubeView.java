@@ -63,7 +63,7 @@ public class CubeView extends SurfaceView{
     }
 
     public void setRotateOfShip(double rotate){
-        Log.v("tag", "rotate" + this.rotate);
+        // Log.v("tag", "rotate" + this.rotate);
         if(this.rotate <= 30 && this.rotate >=-30){
             this.rotate += rotate;
         }
