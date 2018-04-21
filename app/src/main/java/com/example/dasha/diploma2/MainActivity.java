@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     public void onStart() {
         super.onStart();
-        this.timer.scheduleAtFixedRate(new GraphUpdater(this.cubeView), 0, 100);
+        this.timer.scheduleAtFixedRate(new GraphUpdater(this.cubeView), 0, 10);
         this.mSensorManager.registerListener(this, this.mOrientation, 1);
         getWindow().setFlags(128, 128);
     }

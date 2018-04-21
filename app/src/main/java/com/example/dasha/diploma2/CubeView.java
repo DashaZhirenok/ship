@@ -24,8 +24,8 @@ public class CubeView extends SurfaceView{
     Bitmap bitmapCompass, bitmapArrow;
     Bitmap bitmapCompass_, bitmapArrow_;
     Paint paint = new Paint();
-    int rotate;
-    int rotateOfArrow = 0;
+    static int rotate=0;
+    static int rotateOfArrow = 30;
     static double speedView = 0.1;
     static String color = "white";
     int widthShip, heightShip, widthSea, heightSea;
@@ -64,7 +64,7 @@ public class CubeView extends SurfaceView{
 
     public void setRotateOfShip(double rotate){
         // Log.v("tag", "rotate" + this.rotate);
-        if(this.rotate <= 30 && this.rotate >=-30){
+        if(this.rotate <= 180 && this.rotate >=-180){
             this.rotate += rotate;
         }
         if (this.rotate > 30){
@@ -93,8 +93,11 @@ public class CubeView extends SurfaceView{
         heightShip = canvas.getHeight();
 
         bitmapShip_ = Bitmap.createScaledBitmap(bitmapShip, widthShip, heightShip, true);
+        canvas.save();
         canvas.rotate(rotate, 500 + (widthShip/6), 300+ (heightShip/6));
         canvas.drawBitmap(bitmapShip_, 350, 320, paint);
+
+        canvas.restore();
 
     }
 
@@ -181,17 +184,26 @@ public class CubeView extends SurfaceView{
                 heightCompass, true);
         canvas.drawBitmap(bitmapCompass_, drawLeftCompass, drawTopCompass, paint);
 
+    }
+
+    public void drawArrow(Canvas canvas){
+        paint.setColor(Color.BLUE);
         // прорисовка стрелы
-        widthArrow = canvas.getWidth()/48;
+        widthArrow = canvas.getWidth()/120;
         heightArrow = canvas.getHeight()/4;
-        drawLeftArrow = 35 + widthCompass/2;
-        drawTopArrow = 0;
+        drawLeftArrow = 39 + widthCompass/2;
+        drawTopArrow = 70;
 
         bitmapArrow_ = Bitmap.createScaledBitmap(bitmapArrow, widthArrow,
                 heightArrow, true);
-        canvas.rotate(rotateOfArrow, 500 + (widthArrow/6), 300+ (heightArrow/6));
+        canvas.save();
+        canvas.rotate(rotate, drawLeftArrow + widthArrow/2, drawTopArrow + heightArrow/2);
         canvas.drawBitmap(bitmapArrow_, drawLeftArrow, drawTopArrow, paint);
+
+        canvas.restore();
     }
+
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event)
