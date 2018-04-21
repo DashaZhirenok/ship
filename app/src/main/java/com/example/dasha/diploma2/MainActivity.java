@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private Sensor mOrientation;
     private SensorManager mSensorManager;
     private Timer timer;
-    private double speed = 0.;
+    private double speedView = 0.;
     private TextView tv_XZ;
     private float xz_angle = 0.0f;
     private int rotateOfShip;
@@ -35,12 +35,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         udpClientHandler = new UdpClientHandler(this);
     }
 
-    public void updateSpeed(double speed){
-        CubeView.setSpeed(speed);
+    public void updateSpeedView(double speedView){
+        CubeView.setSpeedView(speedView);
     }
 
-    public double getUpdatedSpeed(){
-        return CubeView.speed;
+    public double getUpdatedSpeedView(){
+        return CubeView.speedView;
+    }
+
+    public String getUpdatedSpeedModel(){
+        return UdpClientThread.speedModel;
     }
 
     public void onSensorChanged(SensorEvent event) {
@@ -56,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         // send rotate to SERVER
         rotateOfShip = this.cubeView.getRotateOfShip();
         this.udpClientThread.setMsgToServer(Integer.toString(rotateOfShip));
+
     }
 
     public void onAccuracyChanged(Sensor sensor, int accuracy) {

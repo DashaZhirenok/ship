@@ -59,7 +59,7 @@ public class JavaUdpServer {
 					
 					// send to Mobile
                     int portMobile = 2245;
-					String dString = "GW. data:" + lineMatlab;
+					String dString = lineMatlab;
                     buf = dString.getBytes();
 					
                     packetMatlab = new DatagramPacket(buf, buf.length, addressMobile, portMobile);
@@ -73,8 +73,8 @@ public class JavaUdpServer {
 					
 					System.out.println("Request from: " + packetMobile.getAddress() + ":" + packetMobile.getPort() + " data: " + lineMobile);
 					
-					// send to Matlab
-					dString = "GW. data:" + lineMobile;
+					// send to Matlab(angle + speed)
+					dString = lineMobile;
                     buf = dString.getBytes();
 					
 					packetMatlab = new DatagramPacket(buf, buf.length, addressMatlab, portMatlab);

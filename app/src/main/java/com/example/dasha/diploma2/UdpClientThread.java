@@ -24,6 +24,10 @@ public class UdpClientThread extends Thread{
     DatagramSocket socket;
     InetAddress address;
 
+    private double speedView = 0.1;
+    public static String speedModel = "0.1";
+    private MainActivity mainActivity = new MainActivity();
+
     public UdpClientThread(String addr, int port, UdpClientHandler handler) {
         super();
         dstAddress = addr;
@@ -32,8 +36,10 @@ public class UdpClientThread extends Thread{
     }
 
     public void setMsgToServer(String cur_msg){
-        this.cur_msg = "mobile. " + cur_msg;
+        speedView = mainActivity.getUpdatedSpeedView();
+        this.cur_msg = cur_msg + " " + speedView;
     }
+
 
     @Override
     public void run() {
@@ -44,6 +50,7 @@ public class UdpClientThread extends Thread{
 
             // send request
             byte[] buf = new byte[256];
+            String[] volumes = new String[50];
             Log.v("tag", "from client: " + cur_msg);
             buf = cur_msg.getBytes();
 
@@ -56,6 +63,13 @@ public class UdpClientThread extends Thread{
 
             socket.receive(packet);
             String line = new String(packet.getData(), 0, packet.getLength());
+            if (packet.getLength() == 0){
+                speedModel = "0.1";
+            }
+            else{
+                volumes = line.split(" ");
+                speedModel = volumes[1];
+            }
 
             Log.v("tag", "from server: " + line);
 

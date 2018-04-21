@@ -26,7 +26,7 @@ public class CubeView extends SurfaceView{
     Paint paint = new Paint();
     int rotate;
     int rotateOfArrow = 0;
-    static double speed = 0.;
+    static double speedView = 0.1;
     static String color = "white";
     int widthShip, heightShip, widthSea, heightSea;
     int widthButtonUp, heightButtonUp, drawLeftButtonUp,
@@ -79,8 +79,8 @@ public class CubeView extends SurfaceView{
         return rotate;
     }
 
-    public static void setSpeed(double speed){
-        CubeView.speed += speed;
+    public static void setSpeedView(double speedView){
+        CubeView.speedView += speedView;
     }
 
     public static void setColor(String color){
@@ -147,7 +147,7 @@ public class CubeView extends SurfaceView{
 
     }
 
-    public void drawTextSpeed(Canvas canvas){
+    public void drawTextSpeedView(Canvas canvas){
         paint.setColor(Color.GREEN);
         // прорисовка фона
         widthFieldForSpeed = canvas.getWidth()/7;
@@ -163,7 +163,8 @@ public class CubeView extends SurfaceView{
         drawLeftTextSpeed = canvas.getWidth() - 180;
         drawTopTextSpeed = 130 + heightFieldForSpeed;
         paint.setTextSize(widthTextSpeed);
-        String currentSpeed = String.format("%.1f", mainActivity.getUpdatedSpeed());
+        // String currentSpeed = String.format("%.11f", mainActivity.getUpdatedSpeedView());
+        String currentSpeed = mainActivity.getUpdatedSpeedModel();
         canvas.drawText(currentSpeed, drawLeftTextSpeed, drawTopTextSpeed, paint);
 
     }
@@ -204,17 +205,17 @@ public class CubeView extends SurfaceView{
                 if( currentX > drawLeftButtonUp && currentX < drawLeftButtonUp + widthButtonUp &&
                         currentY > drawTopButtonUp && currentY < drawTopButtonUp + heightButtonUp )
                 {
-                    mainActivity.updateSpeed(0.2);
+                    mainActivity.updateSpeedView(0.1);
                     GraphUpdater.updateColor("black1");
-                    Log.v("tag", "onTouchEvent: drawable touched_1 " + mainActivity.getUpdatedSpeed());
+                    Log.v("tag", "onTouchEvent: drawable touched_1 " + mainActivity.getUpdatedSpeedView());
                 }
 
                 else if( currentX > drawLeftButtonDawn && currentX < drawLeftButtonDawn + widthButtonDown &&
                         currentY > drawTopButtonDown && currentY < drawTopButtonDown + heightButtonDown )
                 {
-                    mainActivity.updateSpeed(-0.2);
+                    mainActivity.updateSpeedView(-0.1);
                     GraphUpdater.updateColor("black2");
-                    Log.v("tag", "onTouchEvent: drawable touched_2 " + mainActivity.getUpdatedSpeed());
+                    Log.v("tag", "onTouchEvent: drawable touched_2 " + mainActivity.getUpdatedSpeedView());
                 }
                 return true;
 

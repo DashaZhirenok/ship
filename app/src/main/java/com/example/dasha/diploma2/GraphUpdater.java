@@ -31,7 +31,7 @@ public class GraphUpdater extends TimerTask {
             cubeView.drawSea(canvas);
             cubeView.drawButtonUp(canvas);
             cubeView.drawButtonDown(canvas);
-            cubeView.drawTextSpeed(canvas);
+            cubeView.drawTextSpeedView(canvas);
             cubeView.drawCompass(canvas);
             cubeView.drawShip(canvas);
             cubeView.getHolder().unlockCanvasAndPost(canvas);
